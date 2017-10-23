@@ -10,6 +10,9 @@ public class Rocket : MonoBehaviour
     Rigidbody rigidBody;
     AudioSource audioSource;
 
+    enum State { Alive, Dying, Transcending }
+    State state = State.Alive;
+
     // Use this for initialization
     void Start()
     {
@@ -20,59 +23,75 @@ public class Rocket : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Thrust();
-        Rotate();
-
+        if(state == State.Alive)
+        {
+            Thrust();
+            Rotate();
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        if(state != State.Alive){ return; } // Ignore collisions when dead
         switch (collision.gameObject.tag)
         {
             case "Friendly":
                 break;
             case "Finish":
-                SceneManager.LoadScene(1);
+                state = State.Transcending;
+                audioSource.Stop();
+                Invoke("LoadNextLevel", 1f);
                 break;
             default:
-                SceneManager.LoadScene(0);
+                state = State.Dying;
+                audioSource.Stop();
+                Invoke("LoadFirstLevel", 1f);
                 break;
-
         }
+    }
+
+    private void LoadFirstLevel()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    private void LoadNextLevel()
+    {
+        SceneManager.LoadScene(1);
     }
 
     private void Thrust()
     {
-        float movementThisFrame = thrustSpeed * Time.deltaTime;
-        if (Input.GetKey(KeyCode.Space))
-        {
-            rigidBody.AddRelativeForce(Vector3.up * movementThisFrame);
-            if (!audioSource.isPlaying)
+            float movementThisFrame = thrustSpeed * Time.deltaTime;
+            if (Input.GetKey(KeyCode.Space))
             {
-                audioSource.Play();
+                rigidBody.AddRelativeForce(Vector3.up * movementThisFrame);
+                if (!audioSource.isPlaying)
+                {
+                    audioSource.Play();
+                }
             }
-        }
-        else
-        {
-            audioSource.Stop();
-        }
+            else
+            {
+                audioSource.Stop();
+            }
     }
 
     private void Rotate()
     {
         rigidBody.freezeRotation = true;
-        float rotationThisFrame = rotationSpeed * Time.deltaTime;
+            float rotationThisFrame = rotationSpeed * Time.deltaTime;
 
-        if (Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
-        {
-            transform.Rotate(Vector3.forward * rotationThisFrame);
-        }
-        if (Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A))
-        {
+            if (Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
+            {
+                transform.Rotate(Vector3.forward * rotationThisFrame);
+            }
+            if (Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A))
+            {
 
-            transform.Rotate(Vector3.back * rotationThisFrame);
-        }
+                transform.Rotate(Vector3.back * rotationThisFrame);
+            }
 
-        rigidBody.freezeRotation = false;
+            rigidBody.freezeRotation = false;
     }
 }
