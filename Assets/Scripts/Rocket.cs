@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class Rocket : MonoBehaviour {
+public class Rocket : MonoBehaviour
+{
 
     [SerializeField] float rotationSpeed = 200f;
     [SerializeField] float thrustSpeed = 800f;
@@ -11,31 +10,32 @@ public class Rocket : MonoBehaviour {
     Rigidbody rigidBody;
     AudioSource audioSource;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         rigidBody = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
         Thrust();
         Rotate();
-		
-	}
+
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
-        switch(collision.gameObject.tag)
+        switch (collision.gameObject.tag)
         {
             case "Friendly":
-                print("ok");
                 break;
-            case "Fuel":
-                print("refuelling");
+            case "Finish":
+                SceneManager.LoadScene(1);
                 break;
             default:
-                print("dead");
+                SceneManager.LoadScene(0);
                 break;
 
         }
