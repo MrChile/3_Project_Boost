@@ -335,15 +335,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 54000029548626316, guid: 6357e55ba020a2b4fbc6a9717a9c028b,
+    - target: {fileID: 114188726808174478, guid: 6357e55ba020a2b4fbc6a9717a9c028b,
         type: 2}
-      propertyPath: m_Constraints
-      value: 56
-      objectReference: {fileID: 0}
-    - target: {fileID: 54000029548626316, guid: 6357e55ba020a2b4fbc6a9717a9c028b,
-        type: 2}
-      propertyPath: m_AngularDrag
-      value: 0.5
+      propertyPath: thrustSpeed
+      value: 800
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6357e55ba020a2b4fbc6a9717a9c028b, type: 2}
